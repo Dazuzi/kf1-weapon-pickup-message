@@ -4,10 +4,12 @@ class WeaponPickupMessage extends Mutator
 var string NameCode, WeaponCode, MessageCode, LastPickup;
 var config color NameColour, WeaponColour, MessageColour;
 var config string WeaponPickupMessage;
+var config bool bPreventSpam;
 
 static function FillPlayInfo(PlayInfo PlayInfo) {
 	Super.FillPlayInfo(PlayInfo);
-	PlayInfo.AddSetting("Weapon Pickup Message", "WeaponPickupMessage",	"Pickup message",	0, 1,	"Text",	"256");
+	PlayInfo.AddSetting("Weapon Pickup Message", "bPreventSpam",		"Prevent spam",		0, 1,	"Check");
+	PlayInfo.AddSetting("Weapon Pickup Message", "WeaponPickupMessage",	"Pickup message",	0, 2,	"Text",	"256");
 }
 
 static event string GetDescriptionText(string Property) {
@@ -23,7 +25,7 @@ function SendPickupMessage(string Player, string Weapon) {
 	local Controller C;
 	local string Message, Pickup;
 	Pickup = Player@Weapon;
-	if (Pickup == LastPickup)
+	if (bPreventSpam && Pickup == LastPickup)
 		return;
 	LastPickup = Pickup;
 	Message = Repl(Repl(MessageCode$WeaponPickupMessage, "%name%", NameCode$Player$MessageCode), "%weapon%", WeaponCode$Weapon$MessageCode);
@@ -51,6 +53,7 @@ function PostBeginPlay() {
 }
 
 defaultproperties {
+	bPreventSpam=True
 	WeaponPickupMessage="%name% picked up %weapon%"
 	NameColour=(B=0,G=155,R=0,A=255)
 	WeaponColour=(B=0,G=155,R=0,A=255)
