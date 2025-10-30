@@ -14,6 +14,8 @@ static function FillPlayInfo(PlayInfo PlayInfo) {
 
 static event string GetDescriptionText(string Property) {
 	switch (Property) {
+		case "bPreventSpam":
+			return "Prevents repeated pickup messages from appearing for the same weapon.";
 		case "WeaponPickupMessage":
 			return "The weapon pickup message is used when a player picks up a gun. %name% gets replaced with player's name and %weapon% with the gun the player picked up.";
 		default:
